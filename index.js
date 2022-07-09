@@ -1,6 +1,5 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
-const Employee = require('./lib/Employee');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
@@ -36,8 +35,9 @@ const initializeBuilder = () => {
                 message: 'Would you like to add a team member?',
                 defaut: false
                 })
-            .then(answers => {
-                const manager = new Manager(answers);
+            .then(({ answers }) => {
+                const { name, id, email, office} = answers
+                const manager = new Manager(name, id, email, office);
                 employees.push(manager);
                 console.log('Added team manager!');
                 if (!answers.confirmAdd) {
@@ -102,8 +102,9 @@ const promptEngineer = () => {
             default: false
         }
     )
-    .then(answers => {
-        const engineer = new Engineer(answers);
+    .then(({ answers }) => {
+        const { name, id, email, github } = answers
+        const engineer = new Engineer(name, id, email, github);
         employees.push(engineer);
         if (!answers.confirmAdd) {
             htmlBuilder(employees)
@@ -143,7 +144,8 @@ const promptIntern = () => {
             default: false
         }
     .then(({ answers }) => {
-        const intern = new Intern(answers);
+        const { name, id, email, school } = answers
+        const intern = new Intern(name, id, email, school);
         employees.push(intern);
         if (!answers.confirmAdd) {
             htmlBuilder(employees)
