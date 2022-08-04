@@ -1,6 +1,7 @@
 ### HTML Team Builder!
 This is a CLI-based application used for building a well-designed HTML site displaying members of a team
-demo: https://drive.google.com/file/d/1CFlDQNpkSJlAH-SN_Ud6_ycwyACPfcUa/view?usp=sharing
+
+Demo: https://drive.google.com/file/d/1CFlDQNpkSJlAH-SN_Ud6_ycwyACPfcUa/view?usp=sharing
 
 ### Features
 - team member information: id, email, github, name, role, office number school
