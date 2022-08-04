@@ -4,28 +4,28 @@ const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
 const employees = [];
-const htmlBuilder = require('./lib/builder.js');
+const builder = require('./lib/builder.js');
 
-const initializeBuilder = () => {
+function initializeBuilder(){
         inquirer
-            .prompt(
+            .prompt([
                 {
-                type: 'text',
-                name: 'manager',
+                type: 'input',
+                name: 'name',
                 message: "What is the team manager's name?"
                 },
                 {
-                type: 'text',
+                type: 'input',
                 name: 'id',
                 message: "What is the team manager's employee id?"
                 },
                 {
-                type: 'text',
+                type: 'input',
                 name: 'email',
                 message: "What is the team manager's email?"
                 },
                 {
-                type: 'text',
+                type: 'input',
                 name: 'office',
                 message: "What is the team manager's office number?"
                 },
@@ -34,13 +34,13 @@ const initializeBuilder = () => {
                 name: 'confirmAdd',
                 message: 'Would you like to add a team member?',
                 defaut: false
-                })
-            .then(({ answers }) => {
-                const { name, id, email, office} = answers
+                }])
+            .then(response => {
+                const { name, id, email, office } = response
                 const manager = new Manager(name, id, email, office);
                 employees.push(manager);
                 console.log('Added team manager!');
-                if (!answers.confirmAdd) {
+                if (response.confirmAdd === true) {
                     promptEmployee()
                 }
                 else {
@@ -56,15 +56,15 @@ const promptEmployee = () => {
     {
         type: 'list',
         message: 'Add team members:',
-        name: 'listBuilder',
+        name: 'list',
         choices: ['Engineer', 'Intern', 'Finish']
     })
-    .then(answers => {
-        if (answers.listBuilder === 'Engineer') {
+    .then(response => {
+        if (response.list === 'Engineer') {
             promptEngineer();
 
         }
-        else if (answers.listBuilder === 'Intern') {
+        else if (response.list === 'Intern') {
             promptIntern();
         }
         else {
@@ -74,7 +74,7 @@ const promptEmployee = () => {
     )}    
 
 const promptEngineer = () => {
-    inquirer.prompt(
+    inquirer.prompt([
         {
             type: 'text',
             name: 'name',
@@ -101,22 +101,23 @@ const promptEngineer = () => {
             message: 'Would you like to add another team member?',
             default: false
         }
-    )
-    .then(({ answers }) => {
-        const { name, id, email, github } = answers
+    ])
+    .then(response => {
+        const { name, id, email, github } = response
         const engineer = new Engineer(name, id, email, github);
         employees.push(engineer);
-        if (!answers.confirmAdd) {
-            htmlBuilder(employees)
+        console.log("Added engineer to team!")
+        if (response.confirmAdd === true) {
+            promptEmployee();
         }
         else {
-            promptEmployee();
+            htmlBuilder(employees)
         }
     })
 }
 
 const promptIntern = () => {
-    inquirer.prompt(
+    inquirer.prompt([
         {
             type: 'text',
             name: 'name',
@@ -142,22 +143,23 @@ const promptIntern = () => {
             name: 'confirmAdd',
             message: 'Would you like to add another team member?',
             default: false
-        }
-    .then(({ answers }) => {
-        const { name, id, email, school } = answers
+    }])
+    .then(response => {
+        const { name, id, email, school } = response
         const intern = new Intern(name, id, email, school);
         employees.push(intern);
-        if (!answers.confirmAdd) {
-            htmlBuilder(employees)
-        } else {
+        if (response.confirmAdd === true) {
             promptEmployee();
         }
-    }))
+        else {
+            htmlBuilder(employees)
+        }
+    })
 }
 
 const htmlBuilder = employees => {
-    const employeeHtml = templateBuilder(employees);
-    fs.writeFile('./dist/template.html', employeeHtml, err => {
+    var html = builder.templateBuilder(employees)
+    fs.writeFile('./dist/template.html', html, err => {
         if (err) {
             throw (err)
         }
