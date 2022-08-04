@@ -164,6 +164,7 @@ const htmlBuilder = employees => {
             throw (err)
         }
     })
+    console.log("Success! Your HTML file, 'template.html,' can be found in the /dist/ folder! ")
 }
 
 initializeBuilder();
